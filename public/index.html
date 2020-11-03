@@ -6,6 +6,105 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="container">
+        <div id="createUser">
+            <h1>Lag ny bruker</h1>
+            <label for="userNameCreate">Brukernavn: </label>
+            <input id="userNameCreate" type="text" />
+            <br><br>
+            <label for="passwordCreate">Passord: </label>
+            <input id="passwordCreate" type="password" />
+            <br><br>
+            <button id="create">Lag ny bruker</button>
+        </div>
+        <div id="loginUser">
+            <h1>Logg inn</h1>
+            <label for="userNameLogin">Brukernavn: </label>
+            <input id="userNameLogin" type="text" />
+            <br><br>
+            <label for="passwordLogin">Passord: </label>
+            <input id="passwordLogin" type="password" />
+            <br><br>
+            <button id="login">Login</button>
+        
+        </div>
+    </div>
     
+    <button id="testBtn">Test button</button>
+
 </body>
+<script>
+    let userNameCreate = document.getElementById('userNameCreate');
+    let passwordCreate = document.getElementById('passwordCreate');
+    let create = document.getElementById('create');
+
+    let userNameLogin = document.getElementById('userNameLogin');
+    let passwordLogin = document.getElementById('passwordLogin');
+    let login = document.getElementById('login');
+
+
+    let testBtn = document.getElementById('testBtn');
+
+    testBtn.addEventListener('click', async ()=>{
+        let response = await fetch('/');
+        let data = await response.text();
+        console.log(data);
+    });
+
+
+    create.addEventListener('click', async ()=>{
+        //Auth: username and password are sent in headers, not body
+        
+        const authString = 'Basic '+window.btoa(`${userNameCreate.value}:${passwordCreate.value}`);
+
+        const config = {
+            method: 'post',
+            headers: {
+                'content-type': 'application/json',
+                'authorization': authString
+            }
+        }
+
+        const url = '/createUser';
+
+        let response = await fetch('/createUser', config);
+        let data = await response.json();
+        console.log(data);
+
+    });
+
+    login.addEventListener('click', async()=>{
+        
+        const authString = 'Basic '+window.btoa(`${userNameLogin.value}:${passwordLogin.value}`);
+
+        const config = {
+            method: 'post',
+            headers: {
+                'content-type': 'application/json',
+                'authorization': authString
+            }
+        }
+
+        const url = '/login';
+
+        let response = await fetch('/login', config);
+        let data = await response.json();
+        console.log(data);
+
+    });
+
+</script>
+
+<style>
+    #container{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #loginUser, #createUser{
+        border: 1px solid black;
+        padding: 0 10px 20px 10px;
+        margin: 20px auto;
+    }
+</style>
 </html>
